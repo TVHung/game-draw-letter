@@ -23,7 +23,10 @@ cc.Class({
 
         arrApple: [cc.Node],
         
-        arrow: cc.Node,
+        arrow: {
+            default: null,
+            type: cc.Prefab         
+        },
 
         _appleNode: null,
         _isDone: false,
@@ -33,9 +36,8 @@ cc.Class({
     },
 
     start(){
-        // this.initEvent();
         this.initEventListener();
-        
+        this.node.getComponent("SoundManager").playBackGroundSound();   //play âm thanh
     },
 
     onLoad () {
@@ -82,21 +84,15 @@ cc.Class({
     },
 
     spawnNewApple(arr_c) {
-        var x = 0;
-        while(arr_c[x].x != null){
+        var i = 0;
+        while(arr_c[i] != null){
             newApple = cc.instantiate(this.apple);
-            newApple.setPosition(arr_c[x].x, arr_c[x].y);
+            newApple.setPosition(arr_c[i].x, arr_c[i].y);
             newApple.getComponent('Apple').game = this;
-            newApple.getComponent('Apple')._index = x;
             // newApple.opacity = 0;
             this.node.addChild(newApple);
-            newApple.zIndex = x;
-            x++;
+            i++;
         }
-    },
-
-    spawnNewArrow(){
-
     },
 
     onClickButtonGreen(){
@@ -136,78 +132,51 @@ cc.Class({
 
     },
     update(dt){
-        if(this.node.children[15].active === false && this.gameState === 1){
-            let i; 
-            let check = true;
-            for(i = 10; i < 15; i++){
-                if(this.node.children[i].active === true){
-                    check = false;
-                    break;
+        //kiểm tra xem người chơi có vẽ ngược hay không
+        var checkNext = true;
+        for(let i = 22; i > 10; i--){
+            if(this.node.children[i].active === false){
+                for(let j = 10; j < i; j++){
+                    if(this.node.children[j].active === true){
+                        checkNext = false;
+                        this.node.getComponent("SoundManager").pauseMusic();   //pause âm thanh
+                        setTimeout(()=>{
+                            
+                        }, 1000);
+                        cc.director.loadScene("Test");
+                    }
                 }
-            }
-            console.log(check);
-            if(check === true){
-                this.checkStrokeOrder(2);
-                setTimeout(()=>{
-                    this.brush.getComponent('Brush').clear();
-                    cc.find("Canvas/A1").active = true; 
-                }, 500);
-                this.gameState = this.gameState + 1;
-            }else{
-                setTimeout(()=>{
-                    cc.director.loadScene("Test");
-                }, 500);
             }
         }
-        if(this.node.children[20].active === false && this.gameState === 2){
-            let i; 
-            let check = true;
-            for(i = 10; i < 20; i++){
-                if(this.node.children[i].active === true){
-                    check = false;
-                    break;
-                }
-            }
-            console.log(check);
-            if(check === true){
-                this.checkStrokeOrder(3);
-                setTimeout(()=>{
-                    this.brush.getComponent('Brush').clear();
-                    cc.find("Canvas/A2").active = true;
-                }, 500);
-                this.gameState = this.gameState + 1;
-            }else{
-                setTimeout(()=>{
-                    cc.director.loadScene("Test");
-                }, 500);
-            }
+
+        //hiển thị hướng dẫn các nét
+        if(this.node.children[15].active === false && this.gameState === 1 && checkNext === true){
+            this.checkStrokeOrder(2);
+            setTimeout(()=>{
+                this.brush.getComponent('Brush').clear();
+                cc.find("Canvas/A1").active = true; 
+            }, 500);
+            this.gameState = this.gameState + 1;
+        }
+        if(this.node.children[20].active === false && this.gameState === 2 && checkNext === true){
+            this.checkStrokeOrder(3);
+            setTimeout(()=>{
+                this.brush.getComponent('Brush').clear();
+                cc.find("Canvas/A2").active = true;
+            }, 500);
+            this.gameState = this.gameState + 1;
         }
         //check hoan thanh
         if(this.node.children[22].active === false && this.gameState == 3){
-            let i; 
-            let check = true;
-            for(i = 10; i < 22; i++){
-                if(this.node.children[i].active === true){
-                    check = false;
-                    break;
-                }
-            }
-            console.log(check);
-            if(check === true){
-                setTimeout(()=>{
-                    this.brush.getComponent('Brush').clear();
-                    cc.find("Canvas/A3").active = true;
-                }, 500);
-            }else{
-                setTimeout(()=>{
-                    cc.director.loadScene("Test");
-                }, 500);
-            }
+            setTimeout(()=>{
+                this.brush.getComponent('Brush').clear();
+                cc.find("Canvas/A3").active = true;
+            }, 500);
             console.log("game over");
             this.gameState = this.gameState + 1;
             setTimeout(()=>{
                 cc.director.loadScene("Test");
-            }, 3000);
+            }, 1000);
         }
     },
 });

@@ -102,13 +102,16 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 37
-      },
-      {
         "__id__": 38
       },
       {
         "__id__": 39
+      },
+      {
+        "__id__": 40
+      },
+      {
+        "__id__": 41
       }
     ],
     "_prefab": null,
@@ -711,7 +714,7 @@
         "__uuid__": "6f801092-0c37-4f30-89ef-c8d960825b36"
       }
     ],
-    "_lineWidth": 70,
+    "_lineWidth": 20,
     "_strokeColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -1624,7 +1627,9 @@
         "__id__": 36
       }
     ],
-    "_prefab": null,
+    "_prefab": {
+      "__id__": 37
+    },
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
@@ -1715,6 +1720,17 @@
     "_id": "eeBtvDtQRIq6VXENtLOG7Y"
   },
   {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 34
+    },
+    "asset": {
+      "__uuid__": "020e258d-665f-4988-98e3-6d1ff6b543f2"
+    },
+    "fileId": "3fewv1uP5DxZGbf53euDU0",
+    "sync": false
+  },
+  {
     "__type__": "cc.Canvas",
     "_name": "",
     "_objFlags": 0,
@@ -1727,7 +1743,7 @@
       "width": 960,
       "height": 640
     },
-    "_fitWidth": false,
+    "_fitWidth": true,
     "_fitHeight": true,
     "_id": "59Cd0ovbdF4byw5sbjJDx7"
   },
@@ -1785,5 +1801,28 @@
     "nextTutorial": 1,
     "gameState": 1,
     "_id": "78vPFVi89MzbhNERsDteD3"
+  },
+  {
+    "__type__": "15a38tq9oBJcaT+bFGuPaHv",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "backGroupSound": {
+      "__uuid__": "37ee65f0-5255-4036-be6b-1235f882a52e"
+    },
+    "loop": true,
+    "audioClipPool": [
+      null,
+      null,
+      null
+    ],
+    "_isPlaying": false,
+    "_audioId": null,
+    "_EffectId": null,
+    "_N$soundVolume": 0.3,
+    "_id": "4cmUJzfYJJ+ZUussrH6uE7"
   }
 ]
