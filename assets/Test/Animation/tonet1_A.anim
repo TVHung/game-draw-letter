@@ -1,0 +1,45 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "tonet1_A",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.3333333333333333,
+  "sample": 60,
+  "speed": 0.4,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "height": [
+        {
+          "frame": 0,
+          "value": 300
+        },
+        {
+          "frame": 0.3333333333333333,
+          "value": 1200
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.016666666666666666,
+          "value": 255
+        }
+      ],
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            31.686,
+            350.592,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

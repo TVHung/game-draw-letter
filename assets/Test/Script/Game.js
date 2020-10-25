@@ -33,6 +33,27 @@ cc.Class({
             type: cc.Node
         },
 
+        net1: {
+            default: null,
+            type: cc.Node
+        },
+
+        net2: {
+            default: null,
+            type: cc.Node
+        },
+
+        net3: {
+            default: null,
+            type: cc.Node
+        },
+
+        net4: {
+            default: null,
+            type: cc.Node
+        },
+
+
         _appleNode: null,
         _bg_a: null,
         _isGameOver: false,
@@ -98,7 +119,7 @@ cc.Class({
             newApple = cc.instantiate(this.apple);
             newApple.setPosition(arr_c[i].x, arr_c[i].y);
             newApple.getComponent('Apple').game = this;
-            // newApple.opacity = 0;
+            newApple.opacity = 0;
             this.node.addChild(newApple);
             i++;
         }
@@ -129,7 +150,7 @@ cc.Class({
     onFinishGameEvent(){
         setTimeout(()=>{
             cc.director.loadScene("Test");
-        }, 1000);
+        }, 500);
     },
 
     onClickReload(){
@@ -140,8 +161,6 @@ cc.Class({
 
     },
     update(dt){
-        //kiểm tra trạng thái của game
-        
         //kiểm tra xem người chơi có vẽ ngược hay không
         var checkNext = true;
         if(this._isGameOver === false){
@@ -163,29 +182,37 @@ cc.Class({
         //hiển thị hướng dẫn các nét
         if(this.node.children[15].active === false && this.nextStep === 1 && checkNext === true){
             setTimeout(()=>{
-                this.tutorial.getComponent(cc.Animation).play('net2_A');
+                this.net1.getComponent(cc.Animation).play();
+            }, 500);
+            setTimeout(()=>{
                 this.brush.getComponent('Brush').clear();
-                cc.find("Canvas/A1").active = true; 
-            }, 1000);
+                this.tutorial.getComponent(cc.Animation).play('net2_A');
+            }, 2000);
             this.nextStep = this.nextStep + 1;
         }
         if(this.node.children[20].active === false && this.nextStep === 2 && checkNext === true){
             setTimeout(()=>{
-                this.tutorial.getComponent(cc.Animation).play('net3_A');
+                this.net2.getComponent(cc.Animation).play();
+            }, 500);
+            setTimeout(()=>{
                 this.brush.getComponent('Brush').clear();
-                cc.find("Canvas/A2").active = true;
-            }, 1000);
+                this.tutorial.getComponent(cc.Animation).play('net3_A');
+            }, 2000);
             this.nextStep = this.nextStep + 1;
         }
         //check hoan thanh
         if(this.node.children[22].active === false && this.nextStep == 3){
             setTimeout(()=>{
+                this.net3.getComponent(cc.Animation).play();
+            }, 500);
+            setTimeout(()=>{
                 this.brush.getComponent('Brush').clear();
-                cc.find("Canvas/A3").active = true;
             }, 1000);
             console.log("game over");
             this.nextStep = this.nextStep + 1;
-            this.onFinishGameEvent();
+            setTimeout(()=>{
+                cc.director.loadScene("Test");
+            }, 2000);
         }
     },
 });
