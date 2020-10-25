@@ -34,18 +34,21 @@ cc.Class({
             this._isCollider = true;
             this.gameComponent._appleNode = this.node;      //node va chạm chính là _appleNode
         }
-        else if (this.node.group === cc.game.groupList[2]) {
-    
+        else if (this.node.group === cc.game.groupList[3]) {
+            this._isCollider = true;
+            this.gameComponent._bg_a = this.node;
         }
+        
     },
  
     onCollisionExit (other, self) {                             //tắt va chạm
         if (this.node.group === cc.game.groupList[2]) {
             this._isCollider = false;
         }
-        else if (this.node.group === cc.game.groupList[2]) {
- 
+        else if (this.node.group === cc.game.groupList[3]) {
+            this._isCollider = false;
         }
+        
     },
  
     initGroup () {
@@ -57,6 +60,9 @@ cc.Class({
         }
         else if (this.editorGroup === Group.Apple) {
             this.contrastGroup = this.GroupName[2];
+        }
+        else if (this.editorGroup === Group.Border) {
+            this.contrastGroup = this.GroupName[3];
         }
     }
     // update (dt) {},

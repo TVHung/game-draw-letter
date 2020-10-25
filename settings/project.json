@@ -2,7 +2,8 @@
   "group-list": [
     "default",
     "Check",
-    "Apple"
+    "Apple",
+    "Border"
   ],
   "collision-matrix": [
     [
@@ -11,11 +12,18 @@
     [
       false,
       false,
+      true,
       true
     ],
     [
       false,
       true,
+      false
+    ],
+    [
+      false,
+      true,
+      false,
       false
     ]
   ],
@@ -25,7 +33,7 @@
   "last-module-event-record-time": 0,
   "design-resolution-width": 960,
   "design-resolution-height": 640,
-  "fit-width": false,
+  "fit-width": true,
   "fit-height": true,
   "use-project-simulator-setting": false,
   "simulator-orientation": false,

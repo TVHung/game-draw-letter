@@ -25,19 +25,26 @@ cc.Class({
         
         arrow: {
             default: null,
-            type: cc.Prefab         
+            type: cc.Node         
+        },
+
+        tutorial: {
+            default: null,
+            type: cc.Node
         },
 
         _appleNode: null,
-        _isDone: false,
-        _count: null,
+        _bg_a: null,
+        _isGameOver: false,
         nextTutorial: 1,
-        gameState: 1,
+        nextStep: 1,
     },
 
     start(){
         this.initEventListener();
-        this.node.getComponent("SoundManager").playBackGroundSound();   //play âm thanh
+        console.log(this.node.children[6]);
+        
+        // this.node.getComponent("SoundManager").playBackGroundSound();   //play âm thanh
     },
 
     onLoad () {
@@ -46,8 +53,9 @@ cc.Class({
         this.arr_tutorial = [{"x":0,"y":140}, {"x":30,"y":100}, {"x":-30,"y":-60}];
         this.arr_c = [{"x":0,"y":140}, {"x":-30,"y":100}, {"x":-50,"y":50}, {"x":-70,"y":0}, {"x":-90,"y":-60}, {"x":-110,"y":-120}, {"x":30,"y":100}, {"x":50,"y":50}, {"x":70,"y":0}, {"x":90,"y":-60}, {"x":110,"y":-120}, {"x":-30,"y":-60}, {"x":30,"y":-60}];
         this.arr_strock = [0, 6, 11];
-        this.checkStrokeOrder(1);
+        // this.checkStrokeOrder(1);
         this.spawnNewApple(this.arr_c);
+        this.tutorial.getComponent(cc.Animation).play('net1_A');
     },
 
     initEventListener () {    
@@ -55,18 +63,19 @@ cc.Class({
             this.onBeCreateNodeCheckEvent(event.getLocation());      
         },this);  
 
-        this.node.on(cc.Node.EventType.TOUCH_MOVE, (event)=>{  
-            this.onCheckClick();  
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, (event)=>{   
+            this.onCheckClick(); 
+            this.onCheckClickBorder();
             let pos = this.node.convertToNodeSpaceAR(event.getLocation());  //convertToNodeSpaceAR: chuyển tọa độ vào nút
             this.brush.getComponent('Brush').drawTo(pos.x, pos.y);
-            this.onBeCreateNodeCheckEvent(pos);   
+            this.onBeCreateNodeCheckEvent(pos); 
         },this);
 
         this.node.on(cc.Node.EventType.TOUCH_START, (event)=>{     
             this.brush.getComponent('Brush').clear();
         },this);
         
-        this.node.on(cc.Node.EventType.TOUCH_END, (event)=>{    
+        this.node.on(cc.Node.EventType.TOUCH_END, (event)=>{   
             // this.brush.getComponent('Brush').clear();
         },this);
     
@@ -111,17 +120,16 @@ cc.Class({
         }
     },
 
-    //check thứ tự nét vẽ
-    checkStrokeOrder(order){
-        this.arrow.opacity = 0;
+    onCheckClickBorder(){
+    //    if(this._bg_a.getComponent("ColliderManager")._isCollider == true){
+    //        console.log("Da cham");
+    //    }
+    },
+
+    onFinishGameEvent(){
         setTimeout(()=>{
-            this.arrow.opacity = 255;
-            this.arrow.getComponent("Arrow").arrowTutorial(order);
-            setTimeout(()=>{
-                this.arrow.opacity = 0;
-            }, 1500);
-            console.log(this.node);
-        }, 500);
+            cc.director.loadScene("Test");
+        }, 1000);
     },
 
     onClickReload(){
@@ -132,51 +140,52 @@ cc.Class({
 
     },
     update(dt){
+        //kiểm tra trạng thái của game
+        
         //kiểm tra xem người chơi có vẽ ngược hay không
         var checkNext = true;
-        for(let i = 22; i > 10; i--){
-            if(this.node.children[i].active === false){
-                for(let j = 10; j < i; j++){
-                    if(this.node.children[j].active === true){
-                        checkNext = false;
-                        this.node.getComponent("SoundManager").pauseMusic();   //pause âm thanh
-                        setTimeout(()=>{
-                            
-                        }, 1000);
-                        cc.director.loadScene("Test");
+        if(this._isGameOver === false){
+            for(let i = 22; i > 10; i--){
+                if(this.node.children[i].active === false){
+                    for(let j = 10; j < i; j++){
+                        if(this.node.children[j].active === true){
+                            checkNext = false;
+                            this._isGameOver = true;
+                            this.onFinishGameEvent();
+                            setTimeout(()=>{
+                            }, 1000);
+                        }
                     }
                 }
             }
         }
 
         //hiển thị hướng dẫn các nét
-        if(this.node.children[15].active === false && this.gameState === 1 && checkNext === true){
-            this.checkStrokeOrder(2);
+        if(this.node.children[15].active === false && this.nextStep === 1 && checkNext === true){
             setTimeout(()=>{
+                this.tutorial.getComponent(cc.Animation).play('net2_A');
                 this.brush.getComponent('Brush').clear();
                 cc.find("Canvas/A1").active = true; 
-            }, 500);
-            this.gameState = this.gameState + 1;
+            }, 1000);
+            this.nextStep = this.nextStep + 1;
         }
-        if(this.node.children[20].active === false && this.gameState === 2 && checkNext === true){
-            this.checkStrokeOrder(3);
+        if(this.node.children[20].active === false && this.nextStep === 2 && checkNext === true){
             setTimeout(()=>{
+                this.tutorial.getComponent(cc.Animation).play('net3_A');
                 this.brush.getComponent('Brush').clear();
                 cc.find("Canvas/A2").active = true;
-            }, 500);
-            this.gameState = this.gameState + 1;
+            }, 1000);
+            this.nextStep = this.nextStep + 1;
         }
         //check hoan thanh
-        if(this.node.children[22].active === false && this.gameState == 3){
+        if(this.node.children[22].active === false && this.nextStep == 3){
             setTimeout(()=>{
                 this.brush.getComponent('Brush').clear();
                 cc.find("Canvas/A3").active = true;
-            }, 500);
-            console.log("game over");
-            this.gameState = this.gameState + 1;
-            setTimeout(()=>{
-                cc.director.loadScene("Test");
             }, 1000);
+            console.log("game over");
+            this.nextStep = this.nextStep + 1;
+            this.onFinishGameEvent();
         }
     },
 });

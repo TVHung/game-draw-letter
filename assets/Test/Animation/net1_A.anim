@@ -1,0 +1,57 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "net1_A",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.3333333333333333,
+  "sample": 60,
+  "speed": 0.3,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -13,
+            134,
+            0
+          ]
+        },
+        {
+          "frame": 0.3333333333333333,
+          "value": [
+            -107.472,
+            -126.924,
+            0
+          ]
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0.23333333333333334,
+          "value": 255
+        },
+        {
+          "frame": 0.26666666666666666,
+          "value": 200
+        },
+        {
+          "frame": 0.3,
+          "value": 100
+        },
+        {
+          "frame": 0.3333333333333333,
+          "value": 0
+        }
+      ],
+      "angle": [
+        {
+          "frame": 0,
+          "value": 250
+        }
+      ]
+    }
+  },
+  "events": []
+}
