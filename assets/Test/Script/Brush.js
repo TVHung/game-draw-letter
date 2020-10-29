@@ -2,10 +2,13 @@ cc.Class({
     extends: cc.Component,
  
     properties: {
-    
+
     },
  
     // LIFE-CYCLE CALLBACKS:
+    start (){
+
+    },
  
     onLoad () {
         this.ctx = this.node.getComponent(cc.Graphics);
