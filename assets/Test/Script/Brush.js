@@ -13,7 +13,7 @@ cc.Class({
     onLoad () {
         this.ctx = this.node.getComponent(cc.Graphics);
     },
- 
+
     setBrushPos (x, y) {
         // set point
         this.ctx.moveTo(x, y);
@@ -32,6 +32,7 @@ cc.Class({
  
     drawTo (x, y) {
         // Vẽ
+        // this.ctx.moveTo(x, y);
         this.ctx.lineTo(x, y);
         this.ctx.stroke();
         this.ctx.moveTo(x, y);

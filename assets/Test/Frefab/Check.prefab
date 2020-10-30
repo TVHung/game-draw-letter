@@ -110,7 +110,18 @@
     "_id": ""
   },
   {
-    "__type__": "cc.BoxCollider",
+    "__type__": "aa125SvklZJ3LhNHaAHjDip",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_isCollider": false,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CircleCollider",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -123,22 +134,7 @@
       "x": 0,
       "y": 0
     },
-    "_size": {
-      "__type__": "cc.Size",
-      "width": 10,
-      "height": 10
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "aa125SvklZJ3LhNHaAHjDip",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "_isCollider": false,
+    "_radius": 10,
     "_id": ""
   },
   {

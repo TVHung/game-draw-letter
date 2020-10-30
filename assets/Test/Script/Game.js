@@ -9,8 +9,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        // brush: cc.Node,
-        draw: cc.Node,
+        brush: cc.Node,
 
         check: {
             default: null,
@@ -84,7 +83,7 @@ cc.Class({
         // cc.director.getCollisionManager().enabledDebugDraw = true;
 
         cc.debug.setDisplayStats(false);
-        this.arr_c = [{'x': -14, 'y': 126}, {'x': -20, 'y': 109}, {'x': -26, 'y': 92}, {'x': -32, 'y': 75}, {'x': -38, 'y': 58}, {'x': -45, 'y': 41}, {'x': -51, 'y': 24}, {'x': -57, 'y': 8}, {'x': -63, 'y': -9}, {'x': -69, 'y': -26}, {'x': -75, 'y': -43}, {'x': -82, 'y': -60}, {'x': -89, 'y': -81}, {'x': -96, 'y': -98}, {'x': -102, 'y': -115}, {'x': -108, 'y': -131}, {'x': -111, 'y': -139}, {'x': 20, 'y': 124}, {'x': 26, 'y': 108}, {'x': 31, 'y': 92}, {'x': 37, 'y': 76}, {'x': 43, 'y': 60}, {'x': 49, 'y': 44}, {'x': 54, 'y': 28}, {'x': 60, 'y': 11}, {'x': 66, 'y': -5}, {'x': 72, 'y': -21}, {'x': 77, 'y': -37}, {'x': 83, 'y': -53}, {'x': 89, 'y': -69}, {'x': 95, 'y': -85}, {'x': 100, 'y': -102}, {'x': 106, 'y': -118}, {'x': 111, 'y': -133}, {'x': -30, 'y': -68}, {'x': -20, 'y': -68}, {'x': -10, 'y': -68}, {'x': 0, 'y': -68}, {'x': 10, 'y': -68}, {'x': 20, 'y': -68}, {'x': 30, 'y': -68}];
+        this.arr_c = [{'x':-20, 'y':109}, {'x':-32, 'y':75}, {'x':-45, 'y':41}, {'x':-57, 'y':8}, {'x':-69, 'y':-26}, {'x':-85, 'y':-68}, {'x':-97, 'y':-102}, {'x':-109, 'y':-136}, {'x':28, 'y':100}, {'x':40, 'y':68}, {'x':51, 'y':36}, {'x':63, 'y':3}, {'x':75, 'y':-29}, {'x':86, 'y':-61}, {'x':98, 'y':-93}, {'x':109, 'y':-126}, {'x':-26, 'y':-68}, {'x':-7, 'y':-68}, {'x':13, 'y':-68}, {'x':33, 'y':-68}];
         this.spawnNewApple(this.arr_c);
         this.tutorial.getComponent(cc.Animation).play('net1_A');
         this.tutorialScript.string = 'Hãy vẽ theo hướng mũi tên, chú ý không vẽ ra ngoài nhé!';
@@ -97,19 +96,20 @@ cc.Class({
             this.onBeCreateNodeCheckEvent(event.getLocation());      
         },this);  
 
-        this.node.on(cc.Node.EventType.TOUCH_START, (event)=>{     
-            //this.brush.getComponent('Brush').clear();
+        this.node.on(cc.Node.EventType.TOUCH_START, (event)=>{
+            var pos = this.node.convertToNodeSpaceAR(event.getLocation());
+            this.brush.getComponent('Brush').setBrushPos(pos.x, pos.y); 
         },this);
 
-        this.node.on(cc.Node.EventType.TOUCH_MOVE, (event)=>{   
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, (event)=>{  
             this.onCheckClick(); 
-            // var pos = this.node.convertToNodeSpaceAR(event.getLocation());  //convertToNodeSpaceAR: chuyển tọa độ vào nút
-            //this.brush.getComponent('Brush').drawTo(pos.x, pos.y);
+            var pos = this.node.convertToNodeSpaceAR(event.getLocation());  
+            this.brush.getComponent('Brush').drawTo(pos.x, pos.y);
             this.onBeCreateNodeCheckEvent(event.getLocation()); 
         },this);
 
         this.node.on(cc.Node.EventType.TOUCH_END, (event)=>{  
-
+            this.brush.getComponent('Brush').close();
         },this);
     
     },
@@ -132,30 +132,31 @@ cc.Class({
             newApple.setPosition(arr_c[i].x, arr_c[i].y);
             newApple.getComponent('Apple').game = this;
             this.apples[i] = newApple;                  //them vo mang
-            // this.apples[i].opacity = 0; 
+            this.apples[i].opacity = 0; 
             this.node.addChild(newApple);
             i++;
         }
     },
 
     onCheckClick(){
-        if(this._appleNode.getComponent("ColliderManager")._isCollider == true){
-            this._appleNode.opacity = 0;
-            this._appleNode.active = false;
-            this._appleNode.getComponent("Apple")._isLive = false;
+        if(this.apple.getComponent("ColliderManager")._isCollider === true){
+            this.apple.opacity = 0;
+            this.apple.active = false;
+            this.apple.getComponent("Apple")._isLive = false;
             // console.log(this._appleNode);
         }
     },
 
     onFinishGameEvent(){ 
+        cc.director.getCollisionManager().enabled = false;
         setTimeout(()=>{
-            cc.find("Canvas/Main game").active = false;
+            // cc.find("Canvas/Main game").active = false;
             cc.find("Canvas/Game over").active = true; 
         }, 2000);   
     },
 
     onClickReplay(){
-        cc.find("Canvas/Main game").active = true;
+        // cc.find("Canvas/Main game").active = true;
         cc.find("Canvas/Game over").active = false;    
         cc.director.loadScene("DrawLetter");
     },
@@ -165,7 +166,7 @@ cc.Class({
             var touchLoc = touch.getLocation();
             if (cc.Intersection.pointInPolygon(touchLoc, this.colliderBorderOut.world.points) || cc.Intersection.pointInPolygon(touchLoc, this.colliderBorderIn.world.points)) {
                 this.touchBorder = true;
-                this.tutorialScript.string = 'Ôi không bạn đã vẽ ra ngoài, hãy vẽ lại nhé!';
+                this.tutorialScript.string = 'Bạn vẽ ra ngoài mất rồi vẽ lại đi nhé!';
                 console.log("hit");
                 checkNext = false;
                 this.onFinishGameEvent();
@@ -185,13 +186,13 @@ cc.Class({
         //kiểm tra xem người chơi có vẽ ngược hay không
         var checkNext = true;
         if(this._isGameOver === false){
-            for(let i = 40; i >= 0; i--){
+            for(let i = 19; i >= 0; i--){
                 if(this.apples[i].active === false){
                     for(let j = 0; j < i; j++){
                         if(this.apples[j].active === true){
                             checkNext = false;
                             this._isGameOver = true;
-                            this.tutorialScript.string = 'Bạn vẽ sai mất rồi vẽ lại đi nhé!';
+                            this.tutorialScript.string = 'Ôi bạn vẽ ngược mất rồi vẽ lại đi nhé!';
                             this.onFinishGameEvent();
                         }
                     }
@@ -199,9 +200,10 @@ cc.Class({
             }
         }
         //hiển thị hướng dẫn các nét
-        if(this.apples[16].active === false && this.nextStep === 1 && checkNext === true){
+        //check net thu nhat
+        if(this.apples[7].active === false && this.nextStep === 1 && checkNext === true && this._isGameOver === false){
             setTimeout(()=>{
-                // this.brush.getComponent('Brush').clear();
+                this.brush.getComponent('Brush').clear();
                 this.net1.getComponent(cc.Animation).play();
                 this.tutorialScript.string = 'Bạn vẽ đúng rồi vẽ nét thứ 2 nhé!';
             }, 500);
@@ -210,9 +212,11 @@ cc.Class({
             }, 1500);
             this.nextStep = this.nextStep + 1;
         }
-        if(this.apples[33].active === false && this.nextStep === 2 && checkNext === true){
+
+        //check net thu 2
+        if(this.apples[15].active === false && this.nextStep === 2 && checkNext === true && this._isGameOver === false){
             setTimeout(()=>{
-                // this.brush.getComponent('Brush').clear();
+                this.brush.getComponent('Brush').clear();
                 this.net2.getComponent(cc.Animation).play();
                 this.tutorialScript.string = 'Bạn vẽ đúng rồi vẽ nét cuối cùng nhé!';
             }, 500);
@@ -221,10 +225,11 @@ cc.Class({
             }, 1500);
             this.nextStep = this.nextStep + 1;
         }
+        
         //check hoan thanh
-        if(this.apples[40].active === false && this.nextStep == 3 && checkNext === true){
+        if(this.apples[19].active === false && this.nextStep == 3 && checkNext === true && this._isGameOver === false){
             setTimeout(()=>{
-                // this.brush.getComponent('Brush').clear();
+                this.brush.getComponent('Brush').clear();
                 this.net3.getComponent(cc.Animation).play();
             }, 500);
             setTimeout(()=>{

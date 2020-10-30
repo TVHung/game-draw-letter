@@ -32,7 +32,7 @@ cc.Class({
     onCollisionEnter (other, self) {  
         if (this.node.group === cc.game.groupList[2]) {     // gr 2 là node check
             this._isCollider = true;
-            this.gameComponent._appleNode = this.node;      //node va chạm chính là _appleNode
+            this.gameComponent.apple = this.node;      //node va chạm chính là _appleNode
         }
     },
  

@@ -427,13 +427,13 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "brush",
+    "_name": "Draw",
     "_objFlags": 0,
     "_parent": {
       "__id__": 5
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 9
@@ -488,7 +488,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "11eIw41wJLZqsEgih4gKin"
+    "_id": "0cKaSFRGBLHbxKCtif+F/+"
   },
   {
     "__type__": "cc.Graphics",
@@ -499,6 +499,9 @@
     },
     "_enabled": true,
     "_materials": [
+      {
+        "__uuid__": "6f801092-0c37-4f30-89ef-c8d960825b36"
+      },
       {
         "__uuid__": "6f801092-0c37-4f30-89ef-c8d960825b36"
       }
@@ -515,27 +518,29 @@
     "_lineCap": 1,
     "_fillColor": {
       "__type__": "cc.Color",
-      "r": 0,
+      "r": 255,
       "g": 0,
       "b": 0,
       "a": 255
     },
-    "_miterLimit": 10,
-    "_id": "42eeL20NpMGLpNoM37Kgw3"
+    "_miterLimit": 0,
+    "_id": "05hwfJsKJEHLGwlsjEctH6"
   },
   {
-    "__type__": "7f141W7g65FbLll6Mrz6u8e",
+    "__type__": "c752b6lkcZGkY1Bw+zNvlA3",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 8
     },
     "_enabled": true,
-    "_id": "48Slz6Zn9EXbECp7zqCmXv"
+    "touches": [],
+    "graphics": null,
+    "_id": "55+/YWb9FGKKigGMKMXlC4"
   },
   {
     "__type__": "cc.Node",
-    "_name": "Draw",
+    "_name": "Brush",
     "_objFlags": 0,
     "_parent": {
       "__id__": 5
@@ -596,7 +601,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "0cKaSFRGBLHbxKCtif+F/+"
+    "_id": "5fSUxnlSxMHoXSm5+UR310"
   },
   {
     "__type__": "cc.Graphics",
@@ -624,24 +629,22 @@
     "_fillColor": {
       "__type__": "cc.Color",
       "r": 255,
-      "g": 255,
-      "b": 255,
+      "g": 0,
+      "b": 0,
       "a": 255
     },
     "_miterLimit": 10,
-    "_id": "05hwfJsKJEHLGwlsjEctH6"
+    "_id": "b5NyxOV/5HrpB4mez6i4aN"
   },
   {
-    "__type__": "c752b6lkcZGkY1Bw+zNvlA3",
+    "__type__": "8337eTSmmRGWppeMHbIwLdg",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 11
     },
     "_enabled": true,
-    "touches": [],
-    "graphics": null,
-    "_id": "55+/YWb9FGKKigGMKMXlC4"
+    "_id": "6fKaDUkllPzriWnbUF2TsP"
   },
   {
     "__type__": "cc.Node",
@@ -2308,6 +2311,9 @@
     },
     "_enabled": true,
     "draw": {
+      "__id__": 8
+    },
+    "brush": {
       "__id__": 11
     },
     "check": {
