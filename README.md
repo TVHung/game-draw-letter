@@ -1,3 +1,3 @@
 # Game draw letter
-***Use cocos creator***
-***Language: Javascript***
+***Use cocos creator
+***Language: Javascript
