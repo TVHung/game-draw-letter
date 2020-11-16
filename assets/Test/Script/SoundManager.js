@@ -53,7 +53,7 @@ cc.Class({
         }
         if (command !== null || command !== undefined) {
             switch (command) {
-                case "begin":
+                case "part":
                     this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[0], loop);
                     break;
                 case "pass":
