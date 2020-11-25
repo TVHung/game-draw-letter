@@ -1,0 +1,77 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "net2_a",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.3333333333333333,
+  "sample": 60,
+  "speed": 0.3,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            27.4,
+            -2.2
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 0.16666666666666666,
+          "value": [
+            28.3,
+            -142.5
+          ],
+          "motionPath": [
+            [
+              44.6,
+              -161.6,
+              34.7,
+              -158.1,
+              56,
+              -165.7
+            ]
+          ]
+        },
+        {
+          "frame": 0.25,
+          "value": [
+            71.7,
+            -156.8
+          ],
+          "motionPath": [
+            [
+              97.2,
+              -128.2,
+              86.8,
+              -144.2,
+              109.2,
+              -109.6
+            ]
+          ]
+        },
+        {
+          "frame": 0.3333333333333333,
+          "value": [
+            116.8,
+            -87.1
+          ],
+          "motionPath": []
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0.25,
+          "value": 255
+        },
+        {
+          "frame": 0.3333333333333333,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "events": []
+}
