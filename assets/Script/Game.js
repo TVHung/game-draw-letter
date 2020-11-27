@@ -27,7 +27,7 @@ cc.Class({
 
         apples: {
             default: [],
-            type: cc.Prefab
+            type: cc.Node
         },
 
         tutorial: {
@@ -120,8 +120,9 @@ cc.Class({
     },
 
     start(){   
-        this.node.getComponent("SoundManager").playBackGroundSound();
-        
+        // this.node.getComponent("SoundManager").playBackGroundSound();
+        var letter = this.letter + "1";
+        this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
     },
 
     onLoad () {                         //chay tat ca game    
@@ -131,21 +132,20 @@ cc.Class({
         this.initEventListener();
         //mang kiem tra so net ve
         arr = new Array();
-        arr[0] = new Array("a", "b", "e", "d");                 //loai chu
-        arr[1] = new Array( 2 , 1 , 1, 2);                      //so net ve chu thuong
-        arr[2] = new Array( 3 , 2 , 1, 2);                      //so net ve chu hoa
-        arr[3] = new Array( 3 , 3 , 4, 2);                      //so net ve in hoa
-        arr[4] = new Array("9 19", "0", "0", "6");                 //diem leo tai cuoi net chu thuong
-        arr[5] = new Array("10 18 21", "7", "0", "7");              //diem leo tai cuoi net chu hoa   
-        arr[6] = new Array("8 16 19", "7 13", "7 11 15", "7");     //diem leo tai cuoi net chu hoa   
+        arr[0] = new Array("a", "b", "e", "d", "k");                 //loai chu
+        arr[1] = new Array( 2 , 1 , 1, 2, 2);                      //so net ve chu thuong
+        arr[2] = new Array( 3 , 2 , 1, 2, 2);                      //so net ve chu hoa
+        arr[3] = new Array( 3 , 3 , 4, 2, 3);                      //so net ve in hoa
+        arr[4] = new Array("9 19", "19", "19", "7 19", "9 19");                 //diem leo tai cuoi net chu thuong
+        arr[5] = new Array("10 18 21", "9 21", "21", "9 21", "9 21");              //diem leo tai cuoi net chu hoa   
+        arr[6] = new Array("7 14 17", "7 12 17", "8 11 14 17", "7 17", "9 13 17");     //diem leo tai cuoi net chu hoa   
 
-        arr_c = new Array();
-        // this.arr_c = [{'x':-19, 'y':-1}, {'x':-48, 'y':-2}, {'x':-72, 'y':-17}, {'x':-91, 'y':-39}, {'x':-101, 'y':-66}, {'x':-100, 'y':-95}, {'x':-90, 'y':-122}, {'x':-71, 'y':-144}, {'x':-46, 'y':-158}, {'x':-18, 'y':-156}, {'x':28, 'y':-2}, {'x':28, 'y':-31}, {'x':28, 'y':-61}, {'x':28, 'y':-90}, {'x':29, 'y':-118}, {'x':31, 'y':-146}, {'x':54, 'y':-162}, {'x':79, 'y':-149}, {'x':98, 'y':-127}, {'x':111, 'y':-102}, {'x':79, 'y':-149}, {'x':98, 'y':-127}, {'x':111, 'y':-102}];
-        // this.spawnNewApple(this.arr_c, 0.8);
+        arr_letter = new Array();
 
         this.gameScore.string += this.score;
         this.getPropertyLetter(arr);
         this.startTimeRoller();
+
         // this.tutorial.getComponent(cc.Animation).play('net6_' + this.letter);
         // setTimeout(()=>{
         //     this.tutorial.getComponent(cc.Animation).play('net7_' + this.letter);
@@ -172,9 +172,9 @@ cc.Class({
     //ham nay se chay dau tien cho man
     startTimeRoller () {
         cc.director.getCollisionManager().enabled = false;
+        this.resetGameData();
         this.getSceneCurrent();
         this.LetterCurrentMap();
-        this.resetGameData();
 
         var times = 3; 
         this.schedule(()=> {    
@@ -206,48 +206,40 @@ cc.Class({
     getSceneCurrent(){
         console.log("scene: " + this.sceneNext);
         if(this.sceneNext > 1){
-            var i = 0;
-            var j = this.apples.length;
-            while(i < j + 1){
-                this.apple.active = true;
-                this.apple.getComponent("Apple")._isLive = true;
-                console.log(this.apples);
-                console.log(typeof(this.apples[i]));
-                // this.apples[i].isDestroy();
-                i++;
-            }
+            this.apple.active = true;
         }
+        console.log(this.apples.length);
         console.log(this.apples);
         if(this.sceneNext === 1){
             this.netthu = 1;                                //xac dinh duoc net tutorial
             this.strockCount = this.strockCount1;
             var letter = this.letter + "1";
             this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
-            this.arr_c = [{'x':-19, 'y':-1}, {'x':-48, 'y':-2}, {'x':-72, 'y':-17}, {'x':-91, 'y':-39}, {'x':-101, 'y':-66}, {'x':-100, 'y':-95}, {'x':-90, 'y':-122}, {'x':-71, 'y':-144}, {'x':-46, 'y':-158}, {'x':-18, 'y':-156}, {'x':28, 'y':-2}, {'x':28, 'y':-31}, {'x':28, 'y':-61}, {'x':28, 'y':-90}, {'x':29, 'y':-118}, {'x':31, 'y':-146}, {'x':54, 'y':-162}, {'x':79, 'y':-149}, {'x':98, 'y':-127}, {'x':111, 'y':-102}];
+            this.arr_letter = [{'x':-19, 'y':-1}, {'x':-48, 'y':-2}, {'x':-72, 'y':-17}, {'x':-91, 'y':-39}, {'x':-101, 'y':-66}, {'x':-100, 'y':-95}, {'x':-90, 'y':-122}, {'x':-71, 'y':-144}, {'x':-46, 'y':-158}, {'x':-18, 'y':-156}, {'x':28, 'y':-2}, {'x':28, 'y':-31}, {'x':28, 'y':-61}, {'x':28, 'y':-90}, {'x':29, 'y':-118}, {'x':31, 'y':-146}, {'x':54, 'y':-162}, {'x':79, 'y':-149}, {'x':98, 'y':-127}, {'x':111, 'y':-102}];
             this.sizeFillDraw = 60;
-            this.spawnNewApple(this.arr_c, 0.8);
+            this.spawnNewApple(this.arr_letter, 0.8);
         }
         if(this.sceneNext === 2){
             this.netthu = arr[1][this.letterIndex] + 1;                                //xac dinh duoc net tutorial
             this.strockCount = this.strockCount2;
             var letter = this.letter + "2";
             this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
-            this.arr_c =    [{'x':93, 'y':173}, {'x':39, 'y':130}, {'x':17, 'y':75}, {'x':4, 'y':17}, {'x':-7, 'y':-38}, {'x':-26, 'y':-92}, {'x':-60, 'y':-138}, {'x':-114, 'y':-160}, {'x':-166, 'y':-136}, {'x':-174, 'y':-77}, {'x': -130, 'y': -30}, 
+            this.arr_letter = [{'x':93, 'y':173}, {'x':39, 'y':130}, {'x':17, 'y':75}, {'x':4, 'y':17}, {'x':-7, 'y':-38}, {'x':-26, 'y':-92}, {'x':-60, 'y':-138}, {'x':-114, 'y':-160}, {'x':-166, 'y':-136}, {'x':-174, 'y':-77}, {'x': -130, 'y': -30}, 
                             {'x':90, 'y':111}, {'x':91, 'y':54}, {'x':91, 'y':-4}, {'x':92, 'y':-61}, {'x':92, 'y':-118}, {'x':128, 'y':-161}, {'x':179, 'y':-137}, {'x':195, 'y':-100}, 
-                            {'x':-35, 'y':-3}, {'x':50, 'y':13}, {'x':131, 'y':10}];
+                            {'x':-35, 'y':-3},  {'x':50, 'y':13}, {'x':131, 'y':10}];
             this.sizeFillDraw = 50;
-            this.spawnNewApple(this.arr_c, 0.8);
+            this.spawnNewApple(this.arr_letter, 0.8);
         }
         if(this.sceneNext === 3){
             this.netthu = arr[1][this.letterIndex] + arr[2][this.letterIndex] + 1;
             this.strockCount = this.strockCount3;
             var letter = this.letter + "3";
             this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
-            this.arr_c = [{'x':0, 'y':170}, {'x':-16, 'y':140}, {'x':-30, 'y':108}, {'x':-46, 'y':65}, {'x':-63, 'y':21}, {'x':-80, 'y':-22}, {'x':-96, 'y':-66}, {'x':-113, 'y':-109}, {'x':-130, 'y':-153}, 
-                                            {'x':16, 'y':140}, {'x':30, 'y':108}, {'x':46, 'y':65}, {'x':63, 'y':21}, {'x':80, 'y':-22}, {'x':96, 'y':-66}, {'x':113, 'y':-109}, {'x':130, 'y':-153}, 
-                                            {'x':-49, 'y':-65}, {'x':-3, 'y':-65}, {'x':43, 'y':-65}];
+            this.arr_letter = [{'x':0, 'y':150}, {'x':-30, 'y':108}, {'x':-46, 'y':65}, {'x':-63, 'y':21}, {'x':-80, 'y':-22}, {'x':-96, 'y':-66}, {'x':-113, 'y':-109}, {'x':-130, 'y':-153}, 
+                                            {'x':30, 'y':108}, {'x':46, 'y':65}, {'x':63, 'y':21}, {'x':80, 'y':-22}, {'x':96, 'y':-66}, {'x':113, 'y':-109}, {'x':130, 'y':-153}, 
+                                            {'x':-49, 'y':-68}, {'x':-3, 'y':-68}, {'x':43, 'y':-68 }];
             this.sizeFillDraw = 90;
-            this.spawnNewApple(this.arr_c, 1.5);
+            this.spawnNewApple(this.arr_letter, 1.5);
         }
         if(this.sceneNext > 3){
             this.onCLickExit();
@@ -292,7 +284,6 @@ cc.Class({
         this.strockCount2 = arr[2][i];
         this.strockCount3 = arr[3][i];
         this.letterIndex = i;
-        console.log(this.letterIndex);
 
     },
 
@@ -333,24 +324,23 @@ cc.Class({
         this.checkNode.position = this.node.convertToNodeSpaceAR(position);       
     },
 
-    spawnNewApple(arr_c, scale) {
+    spawnNewApple(arr_letter, scale) {
         var i = 0;
-        while(arr_c[i] != null){
+        while(arr_letter[i] != null){
             this.apples[i] = cc.instantiate(this.apple);
-            this.apples[i].setPosition(arr_c[i].x, arr_c[i].y);
+            this.apples[i].setPosition(arr_letter[i].x, arr_letter[i].y);
             this.apples[i].getComponent('Apple').game = this;
             this.node.addChild(this.apples[i]);
             this.apples[i].scale = scale;
             this.apples[i]._components[3].radius = this.sizeCollider;           //set size collider cho cac man khac nhau
-            // console.log(this.apples[i]._components[3].radius);  //lấy ra độ lớn collider
             i++;
         }
     },
 
-    setPositionApple(arr_c, scale){
+    setPositionApple(arr_letter, scale){
         var i = 0;
-        while(arr_c[i] != null){
-            this.apples[i].setPosition(arr_c[i].x, arr_c[i].y);
+        while(arr_letter[i] != null){
+            this.apples[i].setPosition(arr_letter[i].x, arr_letter[i].y);
             this.apples[i].active = true;
             this.apples[i].scale = scale;
             this.apples[i].opacity = 255;
@@ -362,21 +352,21 @@ cc.Class({
         var i = 0;
             var j = this.apples.length;
             while(i < j){
-                this.apples[i].isDestroy();
+                this.apples[i].removeFromParent();
                 i++;
             }
+        this.apples.length = 0;
     },
 
     onCheckClick(){
         if(this.apple.getComponent("ColliderManager")._isCollider === true){
             this.apple.active = false;
             this.apple.getComponent("Apple")._isLive = false;
-            this.apple.getComponent("Apple").isDestroy();
         }
     },
 
     onFinishGameEvent(){ 
-        // this.destroyAllNode();
+        this.destroyAllNode();
         cc.director.getCollisionManager().enabled = false;
         this.brush.getComponent('Brush').nonDraw();
         this.unschedule(this.countDownScheduleCallBack);
@@ -414,15 +404,13 @@ cc.Class({
     },
 
     onClickPre(){
-        // cc.find("Canvas/Game over").active = false;    
         this.paint.getComponent('Brush').clear();
         this.brush.getComponent('Brush').clear();
-        // this.sceneNext--;
         this.startTimeRoller();
     },
 
     onClickReplay(){
-        // cc.find("Canvas/Game over").active = false;    
+        this.destroyAllNode(); 
         this.paint.getComponent('Brush').clear();   
         this.brush.getComponent('Brush').clear();
         this.startTimeRoller();
@@ -435,7 +423,6 @@ cc.Class({
             // if (cc.Intersection.pointInPolygon(touchLoc, this.arrCollider[0].world.points) || cc.Intersection.pointInPolygon(touchLoc, this.arrCollider[1].world.points)) {
             //     this.touchBorder = true;
             //     this.tutorialScript.string = 'Bạn vẽ ra ngoài mất rồi vẽ lại đi nhé!';
-            //     console.log("hit");
             //     checkNext = false;
             //     this._win = false;
             //     this.onFinishGameEvent();
@@ -572,15 +559,15 @@ cc.Class({
                         this.node.getComponent("SoundManager").playEffectSound("exactly", false);
                     }
                     if(this.nextStep === 2){
-                        this.PaintFill(this.arr_c, 0, mangsonet, this.sizeFillDraw);
+                        this.PaintFill(this.arr_letter, 0, mangsonet, this.sizeFillDraw);
                     }else{
-                        this.PaintFill(this.arr_c, mangsonet1 + 1, mangsonet, this.sizeFillDraw);
+                        this.PaintFill(this.arr_letter, mangsonet1 + 1, mangsonet, this.sizeFillDraw);
                     }
                     console.log("Step: " + this.nextStep);
                 }, 500);
                 setTimeout(()=>{
                     if(this.sceneNext < 4){
-                        console.log("net: " + this.netthu);
+                        // console.log("net: " + this.netthu);
                         this.tutorial.getComponent(cc.Animation).play('net'+ (this.netthu) + '_' + this.letter);
                         this.netthu++;
                     }
@@ -591,35 +578,47 @@ cc.Class({
         }
 
         //check net cuoi
-        if(this.apples[new Number(arr[this.sceneNext + 3][this.letterIndex].split(" ")[arr[1][this.letterIndex] - 1])].active === false && this.nextStep == this.strockCount && checkNext === true && this._isGameOver === false && this.sceneNext < 4){
-            setTimeout(()=>{
-                this.brush.getComponent('Brush').clear();
-                var n = this.sceneNext - 1;
-                if(n === 1){
-                    var a = new Number(arr[4][this.letterIndex].split(" ")[arr[1][this.letterIndex] - 2]);
-                    var b = new Number(arr[4][this.letterIndex].split(" ")[arr[1][this.letterIndex] - 1]);
-                } 
-                if(n === 2){
-                    var a = new Number(arr[5][this.letterIndex].split(" ")[arr[2][this.letterIndex] - 2]);
-                    var b = new Number(arr[5][this.letterIndex].split(" ")[arr[2][this.letterIndex] - 1]);
-                }
-                if(n === 3){
-                    var a = new Number(arr[6][this.letterIndex].split(" ")[arr[3][this.letterIndex] - 2]);
-                    var b = new Number(arr[6][this.letterIndex].split(" ")[arr[3][this.letterIndex] - 1]);
-                }
-                console.log(a + ", " + b);
-                this.PaintFill(this.arr_c, a+1, b, this.sizeFillDraw);
-                this.node.getComponent("SoundManager").playEffectSound("exactly", false);
-            }, 500);
-            setTimeout(()=>{
-                this.tutorialScript.string = 'Bạn đã hoàn thành, chúc mừng!';
-            }, 1000);
-            this.nextStep = this.nextStep + 1;
+        // console.log("A" + new Number(arr[this.sceneNext+4][this.letterIndex].split(" ")[arr[this.sceneNext+1][this.letterIndex] - 1]));
+        if(this.apples.length != 0){
+            if(this.apples[this.apples.length - 1].active === false && this.nextStep == this.strockCount && checkNext === true && this._isGameOver === false && this.sceneNext < 4){
+                setTimeout(()=>{
+                    this.brush.getComponent('Brush').clear();
+                    var n = this.sceneNext - 1;
+                    if(n === 1){
+                        var a = new Number(arr[4][this.letterIndex].split(" ")[arr[1][this.letterIndex] - 2]);
+                        var b = new Number(arr[4][this.letterIndex].split(" ")[arr[1][this.letterIndex] - 1]);
+                        if(arr[1][this.letterIndex] == 1){
+                            a = -1;
+                        }
+                    } 
+                    if(n === 2){
+                        var a = new Number(arr[5][this.letterIndex].split(" ")[arr[2][this.letterIndex] - 2]);
+                        var b = new Number(arr[5][this.letterIndex].split(" ")[arr[2][this.letterIndex] - 1]);
+                        if(arr[2][this.letterIndex] == 1){
+                            a = -1;
+                        }
+                    }
+                    if(n === 3){
+                        var a = new Number(arr[6][this.letterIndex].split(" ")[arr[3][this.letterIndex] - 2]);
+                        var b = new Number(arr[6][this.letterIndex].split(" ")[arr[3][this.letterIndex] - 1]);
+                        if(arr[3][this.letterIndex] == 1){
+                            a = -1;
+                        }
+                    }
+                    this.PaintFill(this.arr_letter, a+1, b, this.sizeFillDraw);
+                    this.node.getComponent("SoundManager").playEffectSound("exactly", false);
+                }, 500);
+                setTimeout(()=>{
+                    this.tutorialScript.string = 'Bạn đã hoàn thành, chúc mừng!';
+                }, 1000);
+                this.nextStep = this.nextStep + 1;
+            }
+            if(this.nextStep === this.strockCount + 1){
+                this._win = true;
+                //doan nay chay animation chuc mung
+                this.onFinishGameEvent();
+            }
         }
-        if(this.nextStep === this.strockCount + 1){
-            this._win = true;
-            //doan nay chay animation chuc mung
-            this.onFinishGameEvent();
-        }
+        
     },
 });
