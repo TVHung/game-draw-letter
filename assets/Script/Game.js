@@ -162,7 +162,8 @@ cc.Class({
         this.nextStep = 1;
         this.tutorial.opacity = 0;
         this.timeRollerBar.fillStart = 0;
-
+        this._isGameOver = false;
+        
         //phần lấy tọa độ
         this.arrPosition = "";
         this.countChoice = 1;
@@ -195,7 +196,9 @@ cc.Class({
                 this.allowDraw = true;
                 this.countDownNode.getChildByName("Sp Num").opacity = 0;
                 this.countDownNode.getChildByName("Nodes start").opacity = 255;
-                this.schedule(this.countDownScheduleCallBack, this.timeRollerStep);
+                setTimeout(() => {
+                    this.schedule(this.countDownScheduleCallBack, this.timeRollerStep);
+                }, 500);
                 this.startGame();
             }
             times--;
@@ -205,10 +208,8 @@ cc.Class({
     //get man choi
     getSceneCurrent(){
         console.log("scene: " + this.sceneNext);
-        if(this.sceneNext > 1){
-            this.apple.active = true;
-        }
-        console.log(this.apples.length);
+        console.log(this.apple);
+        // console.log(this.apples.length);
         console.log(this.apples);
         if(this.sceneNext === 1){
             this.netthu = 1;                                //xac dinh duoc net tutorial
@@ -217,7 +218,9 @@ cc.Class({
             this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
             this.arr_letter = [{'x':-19, 'y':-1}, {'x':-48, 'y':-2}, {'x':-72, 'y':-17}, {'x':-91, 'y':-39}, {'x':-101, 'y':-66}, {'x':-100, 'y':-95}, {'x':-90, 'y':-122}, {'x':-71, 'y':-144}, {'x':-46, 'y':-158}, {'x':-18, 'y':-156}, {'x':28, 'y':-2}, {'x':28, 'y':-31}, {'x':28, 'y':-61}, {'x':28, 'y':-90}, {'x':29, 'y':-118}, {'x':31, 'y':-146}, {'x':54, 'y':-162}, {'x':79, 'y':-149}, {'x':98, 'y':-127}, {'x':111, 'y':-102}];
             this.sizeFillDraw = 60;
-            this.spawnNewApple(this.arr_letter, 0.8);
+            // setTimeout(() => {
+                this.spawnNewApple(this.arr_letter, 0.8);
+            // }, 4600);
         }
         if(this.sceneNext === 2){
             this.netthu = arr[1][this.letterIndex] + 1;                                //xac dinh duoc net tutorial
@@ -228,7 +231,9 @@ cc.Class({
                             {'x':90, 'y':111}, {'x':91, 'y':54}, {'x':91, 'y':-4}, {'x':92, 'y':-61}, {'x':92, 'y':-118}, {'x':128, 'y':-161}, {'x':179, 'y':-137}, {'x':195, 'y':-100}, 
                             {'x':-35, 'y':-3},  {'x':50, 'y':13}, {'x':131, 'y':10}];
             this.sizeFillDraw = 50;
-            this.spawnNewApple(this.arr_letter, 0.8);
+            // setTimeout(() => {
+                this.spawnNewApple(this.arr_letter, 0.8);
+            // }, 4600);
         }
         if(this.sceneNext === 3){
             this.netthu = arr[1][this.letterIndex] + arr[2][this.letterIndex] + 1;
@@ -239,7 +244,9 @@ cc.Class({
                                             {'x':30, 'y':108}, {'x':46, 'y':65}, {'x':63, 'y':21}, {'x':80, 'y':-22}, {'x':96, 'y':-66}, {'x':113, 'y':-109}, {'x':130, 'y':-153}, 
                                             {'x':-49, 'y':-68}, {'x':-3, 'y':-68}, {'x':43, 'y':-68 }];
             this.sizeFillDraw = 90;
-            this.spawnNewApple(this.arr_letter, 1.5);
+            // setTimeout(() => {
+                this.spawnNewApple(this.arr_letter, 1.5);
+            // }, 4600);
         }
         if(this.sceneNext > 3){
             this.onCLickExit();
@@ -325,6 +332,7 @@ cc.Class({
     },
 
     spawnNewApple(arr_letter, scale) {
+        this.destroyAllNode();  
         var i = 0;
         while(arr_letter[i] != null){
             this.apples[i] = cc.instantiate(this.apple);
@@ -366,8 +374,9 @@ cc.Class({
     },
 
     onFinishGameEvent(){ 
-        this.destroyAllNode();
         cc.director.getCollisionManager().enabled = false;
+        this.apple.active = true;               //component để các prefab xuất hiện
+        this.destroyAllNode();
         this.brush.getComponent('Brush').nonDraw();
         this.unschedule(this.countDownScheduleCallBack);
         
@@ -441,6 +450,7 @@ cc.Class({
             }
             // Thực thi chức năng hoàn thành trò chơi
             this.onFinishGameEvent();
+            console.log(this.apples);
         }
     },
     
@@ -534,7 +544,7 @@ cc.Class({
         }
         //hiển thị hướng dẫn các nét
         //check net thu nhat
-        if(this.nextStep <= this.strockCount - 1 && this.sceneNext < 4){
+        if(this.nextStep <= this.strockCount - 1 && this.sceneNext < 4 && checkNext === true && this._isGameOver === false){
             if(this.sceneNext === 1){
                 var mangsonet = new Number(arr[4][this.letterIndex].split(" ")[this.nextStep - 1]);
                 if(this.nextStep > 1){
@@ -551,7 +561,7 @@ cc.Class({
                     var mangsonet1 = new Number(arr[6][this.letterIndex].split(" ")[this.nextStep - 2]);
                 }
             }
-            if(this.apples[mangsonet].active === false && checkNext === true && this._isGameOver === false){
+            if(this.apples[mangsonet].active === false){
                 setTimeout(()=>{
                     if(this.sceneNext < 4){
                         this.brush.getComponent('Brush').clear();
