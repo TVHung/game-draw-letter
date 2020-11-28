@@ -65,6 +65,12 @@ cc.Class({
                 case "second":
                     this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[3], loop);
                     break;
+                case "begin":
+                    this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[4], loop);
+                    break;
+                case "drawing":
+                    this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[5], loop);
+                    break;
                 default:
                     console.error("Command is invalid");
             }
