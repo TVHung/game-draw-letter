@@ -71,6 +71,21 @@ cc.Class({
                 case "drawing":
                     this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[5], loop);
                     break;
+                case "vesai":
+                    this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[6], loop);
+                    break;
+                case "vedung":
+                    this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[7], loop);
+                    break;
+                case "lamtotlam":
+                    this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[8], loop);
+                    break;
+                case "chutieptheo":
+                    this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[9], loop);
+                    break;
+                case "hoanthanh":
+                    this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[10], loop);
+                    break;
                 default:
                     console.error("Command is invalid");
             }

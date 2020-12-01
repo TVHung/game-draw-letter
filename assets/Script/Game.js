@@ -91,12 +91,17 @@ cc.Class({
             type: cc.SpriteAtlas
         },
 
+        character: {
+            default: null,
+            type: cc.Node
+        },
+
         _isGameOver: false,
         _win: false,
         nextStep: 0,
         sceneNext: 1,
         sizeCollider: 20,
-        letter: "A",                //chu se duoc ve
+        letter: "",                //chu se duoc ve
         strockCount: 0,
         strockCount1: 0,
         strockCount2: 0, 
@@ -131,13 +136,13 @@ cc.Class({
 
         //mang kiem tra so net ve
         arr = new Array();
-        arr[0] = new Array("a", "b", "e", "d", "k");                 //loai chu
-        arr[1] = new Array( 2 , 1 , 1, 2, 2);                      //so net ve chu thuong
-        arr[2] = new Array( 3 , 2 , 1, 2, 2);                      //so net ve chu hoa
-        arr[3] = new Array( 3 , 3 , 4, 2, 3);                      //so net ve in hoa
-        arr[4] = new Array("9 19", "19", "19", "7 19", "9 19");                 //diem leo tai cuoi net chu thuong
-        arr[5] = new Array("10 18 21", "9 21", "21", "9 21", "9 21");              //diem leo tai cuoi net chu hoa   
-        arr[6] = new Array("7 14 17", "7 12 17", "8 11 14 17", "7 17", "9 13 17");     //diem leo tai cuoi net chu hoa   
+        arr[0] = new Array("a", "b", "e", "d", "k");                                //loai chu
+        arr[1] = new Array( 2 , 1 , 1, 2, 2);                                       //so net ve chu thuong
+        arr[2] = new Array( 3 , 2 , 1, 2, 2);                                       //so net ve chu hoa
+        arr[3] = new Array( 3 , 3 , 4, 2, 3);                                       //so net ve in hoa
+        arr[4] = new Array("9 19", "19", "19", "7 19", "9 19");                     //diem leo tai cuoi net chu thuong
+        arr[5] = new Array("10 18 21", "9 21", "21", "9 21", "9 21");               //diem leo tai cuoi net chu hoa   
+        arr[6] = new Array("7 14 17", "7 12 17", "8 11 14 17", "7 17", "9 13 17");  //diem leo tai cuoi net chu hoa   
 
         arr_letter = new Array();
 
@@ -173,9 +178,16 @@ cc.Class({
     //ham nay se chay dau tien cho man
     startTimeRoller () {
         this.resetGameData();
-        var letter = this.letter + this.sceneNext;                                                  //load hinh anh tiep theo
-        this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
-        if(this.sceneNext > 3){
+        if(this.sceneNext <= 3){
+            var letter = this.letter + this.sceneNext;                                                  //load hinh anh tiep theo
+            this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
+            // load SpriteFrame
+            // var self = this;
+            // cc.loader.loadres("assets/Res/images/letter/a1", cc.SpriteFrame, function (err, spriteFrame) {
+            //     self.mask.getComponent(cc.Mask).spriteFrame = spriteFrame;
+            // });
+
+        }else{
             this.onCLickExit();
         }
         this.LetterCurrentMap();
@@ -206,7 +218,7 @@ cc.Class({
                 this.getSceneCurrent();
             }
             times--;
-        }, 1, 3);  //1: mỗi giây 1 lần, 3 là repeat
+        }, 0.1, 3);  //1: mỗi giây 1 lần, 3 là repeat
     },
 
     //get man choi
@@ -216,16 +228,16 @@ cc.Class({
         if(this.sceneNext === 1){
             this.netthu = 1;                                //xac dinh duoc net tutorial
             this.strockCount = this.strockCount1;
-            this.arr_letter = [{'x':-19, 'y':-1}, {'x':-48, 'y':-2}, {'x':-72, 'y':-17}, {'x':-91, 'y':-39}, {'x':-101, 'y':-66}, {'x':-100, 'y':-95}, {'x':-90, 'y':-122}, {'x':-71, 'y':-144}, {'x':-46, 'y':-158}, {'x':-18, 'y':-156}, {'x':28, 'y':-2}, {'x':28, 'y':-31}, {'x':28, 'y':-61}, {'x':28, 'y':-90}, {'x':29, 'y':-118}, {'x':31, 'y':-146}, {'x':54, 'y':-162}, {'x':79, 'y':-149}, {'x':98, 'y':-127}, {'x':111, 'y':-102}];
+            this.arr_letter = [{'x':-19, 'y':-60}, {'x':-48, 'y':-62}, {'x':-72, 'y':-77}, {'x':-91, 'y':-99}, {'x':-101, 'y':-126}, {'x':-100, 'y':-155}, {'x':-90, 'y':-182}, {'x':-71, 'y':-204}, {'x':-46, 'y':-218}, {'x':-18, 'y':-216}, {'x':28, 'y':-62}, {'x':28, 'y':-91}, {'x':28, 'y':-121}, {'x':28, 'y':-150}, {'x':29, 'y':-178}, {'x':31, 'y':-206}, {'x':54, 'y':-222}, {'x':79, 'y':-209}, {'x':98, 'y':-187}, {'x':111, 'y':-162}];
             this.sizeFillDraw = 60;
             this.spawnNewApple(this.arr_letter, 0.8);
         }
         if(this.sceneNext === 2){
             this.netthu = arr[1][this.letterIndex] + 1;                                //xac dinh duoc net tutorial
             this.strockCount = this.strockCount2;
-            this.arr_letter = [{'x':93, 'y':173}, {'x':39, 'y':130}, {'x':17, 'y':75}, {'x':4, 'y':17}, {'x':-7, 'y':-38}, {'x':-26, 'y':-92}, {'x':-60, 'y':-138}, {'x':-114, 'y':-160}, {'x':-166, 'y':-136}, {'x':-174, 'y':-77}, {'x': -130, 'y': -30}, 
-                            {'x':90, 'y':111}, {'x':91, 'y':54}, {'x':91, 'y':-4}, {'x':92, 'y':-61}, {'x':92, 'y':-118}, {'x':128, 'y':-161}, {'x':179, 'y':-137}, {'x':195, 'y':-100}, 
-                            {'x':-35, 'y':-3},  {'x':50, 'y':13}, {'x':131, 'y':10}];
+            this.arr_letter = [{'x':93, 'y':113}, {'x':39, 'y':70}, {'x':17, 'y':15}, {'x':4, 'y':-57}, {'x':-7, 'y':-98}, {'x':-26, 'y':-152}, {'x':-60, 'y':-198}, {'x':-114, 'y':-220}, {'x':-166, 'y':-196}, {'x':-174, 'y':-137}, {'x': -130, 'y': -90}, 
+                            {'x':90, 'y':51}, {'x':91, 'y':-6}, {'x':91, 'y':-64}, {'x':92, 'y':-121}, {'x':92, 'y':-178}, {'x':128, 'y':-221}, {'x':179, 'y':-197}, {'x':195, 'y':-160}, 
+                            {'x':-35, 'y':-63},  {'x':50, 'y':-53}, {'x':131, 'y':-50}];
             this.sizeFillDraw = 50;
             this.spawnNewApple(this.arr_letter, 0.8);
         }
@@ -240,24 +252,6 @@ cc.Class({
         }
     },
 
-    loadImage(){
-        if(this.sceneNext === 1){
-            var letter = this.letter + "1";
-            this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
-        }
-        if(this.sceneNext === 2){
-            var letter = this.letter + "2";
-            this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
-        }
-        if(this.sceneNext === 3){
-            var letter = this.letter + "3";
-            this.mask.getComponent(cc.Mask).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
-        }
-        if(this.sceneNext > 3){
-            this.onCLickExit();
-        }
-    },
-
     startGame(){
         setTimeout(()=>{
             this.countDownNode.getChildByName("Nodes start").opacity = 0;
@@ -269,6 +263,12 @@ cc.Class({
     },
 
     LetterCurrentMap(){
+        var letter = this.letter + "1";                                                  
+        cc.find("Canvas/Main game/Bg A/TableMap/Letter1/letter").getComponent(cc.Sprite).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
+        letter = this.letter + "2";                                                 
+        cc.find("Canvas/Main game/Bg A/TableMap/Letter2/letter").getComponent(cc.Sprite).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
+        letter = this.letter + "3";                                                  
+        cc.find("Canvas/Main game/Bg A/TableMap/Letter3/letter").getComponent(cc.Sprite).spriteFrame = this.letterAtlas.getSpriteFrame(letter);
         for(var i = 1; i <= 3; i++){
             var letterCurrent = "Letter" + i;   
             if(i < this.sceneNext){
@@ -310,12 +310,12 @@ cc.Class({
         },this);
 
         this.node.on(cc.Node.EventType.TOUCH_MOVE, (event)=>{  
-            this.brush.getComponent('Brush').setBrushLineWidth(20);
+            // this.brush.getComponent('Brush').setBrushLineWidth(20);
             this.onCheckClick(); 
-            var pos = this.node.convertToNodeSpaceAR(event.getLocation());
-            if(this.allowDraw === true){
-                this.brush.getComponent('Brush').drawTo(pos.x, pos.y);
-            }
+            // var pos = this.node.convertToNodeSpaceAR(event.getLocation());
+            // if(this.allowDraw === true){
+            //     this.brush.getComponent('Brush').drawTo(pos.x, pos.y);
+            // }
             this.onBeCreateNodeCheckEvent(event.getLocation()); 
         },this);
 
@@ -381,18 +381,34 @@ cc.Class({
             this.score += 100 - Math.ceil(this.timeRollerBar.fillStart * 100);
             this.scoretable.string = 100 - Math.ceil(this.timeRollerBar.fillStart * 100);
             this.gameScore.string = this.score;
+            //co vu
+            this.character.getComponent(cc.Animation).play('monsterIn');
+            if(this.sceneNext < 4){
+                this.node.getComponent("SoundManager").playEffectSound("chutieptheo", false);
+            }else{
+                this.node.getComponent("SoundManager").playEffectSound("hoanthanh", false);
+            }
+            setTimeout(() => {
+                this.character.getComponent(cc.Animation).play('monsterOut');
+            }, 2500);
+            
 
             setTimeout(()=>{
                 if(this.sceneNext <= 4){
                     this.onClickNext();
                 }
-            }, 1000);
+            }, 3000);
         }else{
+            this.character.getComponent(cc.Animation).play('monsterIn');
+            this.node.getComponent("SoundManager").playEffectSound("vesai", false);
+            setTimeout(() => {
+                this.character.getComponent(cc.Animation).play('monsterOut');
+            }, 2500);
             setTimeout(()=>{
                 if(this.sceneNext < 4){
                     this.onClickReplay();
                 }
-            }, 1000);
+            }, 3000);
         } 
         
     },
@@ -402,7 +418,9 @@ cc.Class({
         this.paint.getComponent('Brush').clear();
         this.brush.getComponent('Brush').clear();
         if(this._win === false){
-            this.sceneNext++;
+            if(this.sceneNext <= 3){
+                this.sceneNext++;
+            }
         }
         this.startTimeRoller();
     },
@@ -530,10 +548,15 @@ cc.Class({
                         this._isGameOver = true;
                         this._win = false;
                         this.tutorialScript.string = 'Ôi bạn vẽ sai mất rồi vẽ lại đi nhé!';
-
                         this.onFinishGameEvent();
-                    } 
-                    
+                    }else{
+                        if(arr[this.sceneNext][this.letterIndex] === 1){
+                            this.PaintFill(this.arr_letter, i-1, i, this.sizeFillDraw);
+                        }else{
+                            this.PaintFill(this.arr_letter, i-1, i, this.sizeFillDraw);
+                        }
+                        
+                    }  
                 }
             }
         }
@@ -563,11 +586,11 @@ cc.Class({
                         this.tutorialScript.string = "Bạn vẽ đúng rồi vẽ nét thứ " + (this.nextStep) + " nhé!";
                         this.node.getComponent("SoundManager").playEffectSound("exactly", false);
                     }
-                    if(this.nextStep === 2){
-                        this.PaintFill(this.arr_letter, 0, mangsonet, this.sizeFillDraw);
-                    }else{
-                        this.PaintFill(this.arr_letter, mangsonet1 + 1, mangsonet, this.sizeFillDraw);
-                    }
+                    // if(this.nextStep === 2){
+                    //     this.PaintFill(this.arr_letter, 0, mangsonet, this.sizeFillDraw);
+                    // }else{
+                    //     this.PaintFill(this.arr_letter, mangsonet1 + 1, mangsonet, this.sizeFillDraw);
+                    // }
                     console.log("Step: " + this.nextStep);
                 }, 500);
                 setTimeout(()=>{
@@ -610,7 +633,7 @@ cc.Class({
                             a = -1;
                         }
                     }
-                    this.PaintFill(this.arr_letter, a+1, b, this.sizeFillDraw);
+                    // this.PaintFill(this.arr_letter, a+1, b, this.sizeFillDraw);
                     this.node.getComponent("SoundManager").playEffectSound("exactly", false);
                 }, 500);
                 setTimeout(()=>{
