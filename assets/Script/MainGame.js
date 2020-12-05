@@ -15,21 +15,12 @@ cc.Class({
         },
     },
 
-    // LIFE-CYCLE CALLBACKS:
-
-    onLoad () {
-
-    },
-
-    start () {
-
+    onLoad(){
+        window.letterDraw = "";
     },
 
     clickButtonLetter(event, customEventData){
-        console.log(customEventData);
+        cc.sys.localStorage.setItem('letter', customEventData);    //set key, value
         cc.director.loadScene("DrawLetter");
     }
-
-
-    // update (dt) {},
 });
