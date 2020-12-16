@@ -2,11 +2,23 @@ cc.Class({
     extends: cc.Component,
     
     properties: {
-        // Khi khoảng cách giữa ngôi sao và nhân vật chính nhỏ hơn giá trị này, bộ sưu tập sẽ được hoàn thành
+        clickSound:{
+            default: null,
+            type: cc.AudioClip
+        },
         _isLive: true,  
 
     },
-   
+    
+    onLoad(){
+        // this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchApple, this); 
+    },
+
+    onTouchApple(){
+        this.node.active = false;
+        cc.audioEngine.play(this.clickSound, false, 1);
+    },
+
     isDestroy(){
         this.node.destroy();
     }

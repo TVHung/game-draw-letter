@@ -86,6 +86,9 @@ cc.Class({
                 case "hoanthanh":
                     this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[10], loop);
                     break;
+                case "batdau":
+                    this._EffectId = cc.audioEngine.playEffect(this.audioClipPool[11], loop);
+                    break;
                 default:
                     console.error("Command is invalid");
             }
