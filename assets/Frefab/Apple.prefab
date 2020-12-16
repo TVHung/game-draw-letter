@@ -133,6 +133,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "clickSound": {
+      "__uuid__": "3bf767eb-2d18-4b9a-b8c0-c10de10a0681"
+    },
     "_isLive": false,
     "_id": ""
   },
@@ -161,7 +164,7 @@
     "asset": {
       "__uuid__": "3738a284-3fca-483a-93b4-3a028455ad89"
     },
-    "fileId": "f0RvRwtB9A3pKHGI83cMSF",
+    "fileId": "",
     "sync": false
   }
 ]

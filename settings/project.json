@@ -54,8 +54,10 @@
       "enable": false
     }
   },
-  "start-scene": "current",
   "migrate-history": [
     "cloud-function"
-  ]
+  ],
+  "preview-port": 1309,
+  "clear-simulator-cache": true,
+  "start-scene": "06f160fa-f5e5-4e9d-b45a-776f23696064"
 }

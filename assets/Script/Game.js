@@ -33,17 +33,7 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-
-        arrCollider: {
-            default: [],
-            type: cc.PolygonCollider
-        },
-
-        tutorialScript: {
-            default: null,
-            type: cc.Label
-        },
-
+        
         gameScore: {
             default: null,
             type: cc.Label
@@ -90,7 +80,7 @@ cc.Class({
         nextStep: 0,
         sceneNext: 1,
         sizeCollider: 20,
-        letter: "",                //chu se duoc ve
+        letter: "a",                //chu se duoc ve
         strockCount: 0,
         strockCount1: 0,
         strockCount2: 0, 
@@ -113,17 +103,19 @@ cc.Class({
         countChoice: 1,
     },
 
-    start(){   
-        this.node.getComponent("SoundManager").playBackGroundSound();
-        var letter = this.letter + "1";
-        var self = this;
-        cc.loader.loadRes("letter/" + letter, cc.SpriteFrame, function (err, spriteFrame) {
-            self.mask.getComponent(cc.Mask).spriteFrame = spriteFrame;
-        });
+    start(){  
+        setTimeout(()=>{
+            this.node.getComponent("SoundManager").playBackGroundSound();
+        }, 2500);
     },
 
-    onLoad () {                         //chay tat ca game    
-        cc.director.getCollisionManager().enabledDebugDraw = true;
+    onLoad () {        
+        // var letter = this.letter + "1";
+        // var self = this;
+        // cc.loader.loadRes("letter/" + letter, cc.SpriteFrame, function (err, spriteFrame) {
+        //     self.mask.getComponent(cc.Mask).spriteFrame = spriteFrame;
+        // });            
+        // cc.director.getCollisionManager().enabledDebugDraw = true;
         cc.debug.setDisplayStats(false);
         //mang kiem tra so net ve
         arr = new Array();
@@ -131,9 +123,9 @@ cc.Class({
         arr[1] = new Array( 2 , 1 , 1, 2, 2);                                       //so net ve chu thuong
         arr[2] = new Array( 3 , 2 , 1, 2, 2);                                       //so net ve chu hoa
         arr[3] = new Array( 3 , 3 , 4, 2, 3);                                       //so net ve in hoa
-        arr[4] = new Array("9 18", "19", "15", "7 19", "9 19");                     //diem leo tai cuoi net chu thuong
+        arr[4] = new Array("11 20", "19", "15", "7 19", "9 19");                     //diem leo tai cuoi net chu thuong
         arr[5] = new Array("15 28 33", "9 21", "38", "9 21", "9 21");               //diem leo tai cuoi net chu hoa   
-        arr[6] = new Array("8 16 20", "7 12 17", "7 11 15 19", "7 17", "9 13 17");  //diem leo tai cuoi net chu hoa   
+        arr[6] = new Array("9 19 24", "7 12 17", "8 15 21 28", "7 17", "9 13 17");  //diem leo tai cuoi net chu hoa   
 
         this.letter = cc.sys.localStorage.getItem('letter');        //lấy chữ cần đọc
 
@@ -166,18 +158,24 @@ cc.Class({
 
         this.gameScore.string += this.score;
         this.getPropertyLetter(arr);
-        this.startTimeRoller();
-        this.initEventListener();
+        //chạy aniamtion nhan vat dong hanh
+        this.character.getComponent(cc.Animation).play('monsterIn');
+        cc.find("Canvas/Character/mess").getComponent(cc.Label).string = 'Con hãy vẽ theo \nhướng mũi tên và\ncác chấm đỏ nhé!';
+        this.node.getComponent("SoundManager").playEffectSound("batdau", false);   
+        setTimeout(() => {
+            this.character.getComponent(cc.Animation).play('monsterOut');
+            this.startTimeRoller();
+        }, 2500);
 
         // setTimeout(()=>{
-        //     this.tutorial.getComponent(cc.Animation).play('net3_' + this.letter);
-        // },2000);
-        // setTimeout(()=>{
-        //     this.tutorial.getComponent(cc.Animation).play('net4_' + this.letter);
+        //     this.tutorial.getComponent(cc.Animation).play('net6_' + this.letter);
         // },4000);
         // setTimeout(()=>{
-        //     this.tutorial.getComponent(cc.Animation).play('net5_' + this.letter);
+        //     this.tutorial.getComponent(cc.Animation).play('net7_' + this.letter);
         // },6000);
+        // setTimeout(()=>{
+        //     this.tutorial.getComponent(cc.Animation).play('net8_' + this.letter);
+        // },8000);
         // setTimeout(()=>{
         //     this.tutorial.getComponent(cc.Animation).play('net6_' + this.letter);
         // },8000);
@@ -264,9 +262,10 @@ cc.Class({
             this.netthu = arr[1][this.letterIndex] + arr[2][this.letterIndex] + 1;
             this.strockCount = this.strockCount3;
             this.arr_letter = this.arr_letter3;
-            this.sizeFillDraw = 100;
+            this.sizeFillDraw = 70;
             this.spawnNewApple(this.arr_letter, 1.5);
         }
+        this.initEventListener();
     },
 
     startGame(){
@@ -275,7 +274,6 @@ cc.Class({
             this.tutorial.opacity = 255;
             this.tutorial.getComponent(cc.Animation).play('net'+ (this.netthu) + '_' + this.letter);
             this.netthu++;
-            this.tutorialScript.string = 'Hãy vẽ theo hướng mũi tên, chú ý không vẽ ra ngoài nhé!';
         }, 500);
     },
 
@@ -310,37 +308,21 @@ cc.Class({
 
     },
 
-    initEventListener () {    
-        this.node.on(cc.Node.EventType.MOUSE_MOVE, (event)=>{     
-            this.onBeCreateNodeCheckEvent(event.getLocation());      
-        },this);  
-
-        this.node.on(cc.Node.EventType.TOUCH_START, (event)=>{
-            var pos = this.node.convertToNodeSpaceAR(event.getLocation());
-            this.brush.getComponent('Brush').setBrushPos(pos.x, pos.y); 
-        },this);
-
-        this.node.on(cc.Node.EventType.TOUCH_MOVE, (event)=>{  
-            // this.brush.getComponent('Brush').setBrushLineWidth(20);
-            this.onCheckClick(); 
-            // var pos = this.node.convertToNodeSpaceAR(event.getLocation());
-            // if(this.allowDraw === true){
-            //     this.brush.getComponent('Brush').drawTo(pos.x, pos.y);
-            // }
+    initEventListener () {  
+        this.node.on(cc.Node.EventType.TOUCH_START, (event)=>{  
             this.onBeCreateNodeCheckEvent(event.getLocation()); 
         },this);
-
-        this.node.on(cc.Node.EventType.TOUCH_END, (event)=>{  
-            this.brush.getComponent('Brush').close();
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, (event)=>{  
+            this.onCheckClick(); 
+            this.onBeCreateNodeCheckEvent(event.getLocation()); 
         },this);
-    
     },
 
     onBeCreateNodeCheckEvent (position) {
         if (!cc.isValid(this.checkNode)) {                                          //cc.isValid: xác định xem giá trị đã chỉ định của đối tượng có hợp lệ hay không
-            this.checkNode = cc.instantiate(this.check);                            //khởi tạo
+            this.checkNode = cc.instantiate(this.check);                            
             this.checkNode.zIndex = cc.macro.MAX_ZINDEX;
-            this.checkNode.getComponent("ColliderManager")._isCollider = false;     //tạo khả năng va chạm
+            // this.checkNode.getComponent("ColliderManager")._isCollider = false;     
             this.node.addChild(this.checkNode);                                     //thêm node 
         }
         this.checkNode.opacity = 0;
@@ -352,8 +334,9 @@ cc.Class({
         var i = 0;
         while(arr_letter[i] != null){
             this.apples[i] = cc.instantiate(this.apple);
-            this.apples[i].setPosition(arr_letter[i].x, arr_letter[i].y);
-            this.apples[i].getComponent('Apple').game = this;
+            // this.apples[i].setPosition(arr_letter[i].x, arr_letter[i].y);
+            this.apples[i].setPosition(3000, 3000);
+            // this.apples[i].getComponent('Apple').game = this;
             this.node.addChild(this.apples[i]);
             this.apples[i].scale = scale;
             this.apples[i]._components[3].radius = this.sizeCollider;           //set size collider cho cac man khac nhau
@@ -361,8 +344,10 @@ cc.Class({
         }
     },
     setPositionNode(arr_letter, a, b){
-        for(var i = a; i <= b; i++){
-            this.apples[i].setPosition(arr_letter[i].x, arr_letter[i].y);
+        if(arr_letter != null && this.apples.length != 0){
+            for(var i = a; i <= b; i++){
+                this.apples[i].setPosition(arr_letter[i].x, arr_letter[i].y);
+            }
         }
     },
 
@@ -377,9 +362,8 @@ cc.Class({
     },
 
     onCheckClick(){
-        if(this.apple.getComponent("ColliderManager")._isCollider === true){
+        if(this.apple.getComponent("ColliderManager")._isCollider && this.apple){
             this.apple.active = false;
-            this.apple.getComponent("Apple")._isLive = false;
             this.node.getComponent("SoundManager").playEffectSound("drawing", false);
         }
     },
@@ -465,11 +449,16 @@ cc.Class({
     },
     
     onCLickExit(){
+        this.node.getComponent("SoundManager").stopAll();   //thì tắt hết âm thanh
+        this.character.getComponent(cc.Animation).stop();
         cc.director.loadScene("MainGame");
     },
 
     onClickBack(){
+        this.node.getComponent("SoundManager").stopAll();   //thì tắt hết âm thanh
+        this.character.getComponent(cc.Animation).stop();
         cc.director.loadScene("MainGame");
+
     },
 
     //Lấy theo kiểu vị trí chia hết cho 8
@@ -531,81 +520,109 @@ cc.Class({
             this.paint.getComponent('Brush').close();
         }
     },
-    
+
     update(dt){
         // this.getPositionLetter();
         // this.getPositionUseDistance();
         //kiểm tra xem người chơi có vẽ ngược hay không
         var checkNext = true;
         if(this._isGameOver === false){
+            var maxIndexIsActive = 0;
             for(let i = 1; i <= this.apples.length - 1; i++){
                 if(this.apples[i].active === false){
-                    if(this.apples[i-1].active === true){
-                        checkNext = false;
-                        this._isGameOver = true;
-                        this._win = false;
-                        this.tutorialScript.string = 'Ôi bạn vẽ sai mất rồi vẽ lại đi nhé!';
-                        this.onFinishGameEvent();
+                    if(i > maxIndexIsActive){
+                        maxIndexIsActive = i;
+                    }
+                }
+            }
+            if(maxIndexIsActive > 0){
+                if(this.apples[maxIndexIsActive-1].active === true){
+                    checkNext = false;
+                    this._isGameOver = true;
+                    this._win = false;
+                    this.onFinishGameEvent();
+                }else{
+                    if(arr[this.sceneNext][this.letterIndex] === 1){
+                        this.PaintFill(this.arr_letter, maxIndexIsActive-1, maxIndexIsActive, this.sizeFillDraw);
                     }else{
-                        if(arr[this.sceneNext][this.letterIndex] === 1){
-                            this.PaintFill(this.arr_letter, i-1, i, this.sizeFillDraw);
-                        }else{
-                            var checkSetPos = true;
-                            for(var j = 0; j < arr[this.sceneNext][this.letterIndex] - 1; j++){
-                                var n = new Number(arr[this.sceneNext + 3][this.letterIndex].split(" ")[j]);
-                                if(i === n+1){
-                                    checkSetPos = false;
-                                }
-                            }  
-                            if(checkSetPos === true){
-                                this.PaintFill(this.arr_letter, i-1, i, this.sizeFillDraw);
+                        var checkSetPos = true;
+                        for(var j = 0; j < arr[this.sceneNext][this.letterIndex] - 1; j++){
+                            var n = new Number(arr[this.sceneNext + 3][this.letterIndex].split(" ")[j]);
+                            if(maxIndexIsActive === n+1){
+                                checkSetPos = false;
                             }
+                        }  
+                        if(checkSetPos === true){
+                            this.PaintFill(this.arr_letter, maxIndexIsActive-1, maxIndexIsActive, this.sizeFillDraw);
                         }
-                        
-                    }  
+                    }
+                    
+                }  
+            }
+        }
+
+        // hien thi cac node truoc khi ve
+        if(this.apples.length != 0){
+            if(this.nextStep <= this.strockCount){
+                if(this.sceneNext === 1){
+                    var sonet = arr[1][this.letterIndex];
+                    var cuoinet = new Number(arr[4][this.letterIndex].split(" ")[this.nextStep - 1]);
+                    if(this.nextStep > 1){
+                        var daunet = new Number(arr[4][this.letterIndex].split(" ")[this.nextStep - 2]);
+                    }
+                }else if(this.sceneNext === 2){
+                    var sonet = arr[2][this.letterIndex];
+                    var cuoinet = new Number(arr[5][this.letterIndex].split(" ")[this.nextStep - 1]);
+                    if(this.nextStep > 1){
+                        var daunet = new Number(arr[5][this.letterIndex].split(" ")[this.nextStep - 2]);
+                    }
+                }else{
+                    var sonet = arr[3][this.letterIndex];
+                    var cuoinet = new Number(arr[6][this.letterIndex].split(" ")[this.nextStep - 1]);
+                    if(this.nextStep > 1){
+                        var daunet = new Number(arr[6][this.letterIndex].split(" ")[this.nextStep - 2]);
+                    }
+                }
+                if(sonet === 1){
+                    this.setPositionNode(this.arr_letter, 0, this.apples.length - 1);
+                }else{
+                        if(this.nextStep === 1){
+                            this.setPositionNode(this.arr_letter, 0, cuoinet);
+                        }else{
+                            setTimeout(() => {
+                                this.setPositionNode(this.arr_letter, daunet + 1, cuoinet);
+                            }, 1000);
+                        }
                 }
             }
         }
+
         //hiển thị hướng dẫn các nét
         //check net thu nhat
         if(this.nextStep <= this.strockCount - 1 && this.sceneNext < 4 && checkNext === true && this._isGameOver === false && this.apples.length !== 0){
             if(this.sceneNext === 1){
-                var mangsonet = new Number(arr[4][this.letterIndex].split(" ")[this.nextStep - 1]);
-                if(this.nextStep > 1){
-                    var mangsonet1 = new Number(arr[4][this.letterIndex].split(" ")[this.nextStep - 2]);
-                }
+                var cuoinet = new Number(arr[4][this.letterIndex].split(" ")[this.nextStep - 1]);
             }else if(this.sceneNext === 2){
-                var mangsonet = new Number(arr[5][this.letterIndex].split(" ")[this.nextStep - 1]);
-                if(this.nextStep > 1){
-                    var mangsonet1 = new Number(arr[5][this.letterIndex].split(" ")[this.nextStep - 2]);
-                }
+                var cuoinet = new Number(arr[5][this.letterIndex].split(" ")[this.nextStep - 1]);
             }else{
-                var mangsonet = new Number(arr[6][this.letterIndex].split(" ")[this.nextStep - 1]);
-                if(this.nextStep > 1){
-                    var mangsonet1 = new Number(arr[6][this.letterIndex].split(" ")[this.nextStep - 2]);
-                }
+                var cuoinet = new Number(arr[6][this.letterIndex].split(" ")[this.nextStep - 1]);
             }
-            if(this.apples[mangsonet].active === false){
+            if(this.apples[cuoinet].active === false){
                 setTimeout(()=>{
                     if(this.sceneNext < 4){
                         this.brush.getComponent('Brush').clear();
-                        this.tutorialScript.string = "Bạn vẽ đúng rồi vẽ nét thứ " + (this.nextStep) + " nhé!";
-                        this.node.getComponent("SoundManager").playEffectSound("exactly", false);
+                        setTimeout(() => {
+                            this.node.getComponent("SoundManager").playEffectSound("exactly", false);
+                        }, 300);
                     }
-                    // if(this.nextStep === 2){
-                    //     this.PaintFill(this.arr_letter, 0, mangsonet, this.sizeFillDraw);
-                    // }else{
-                    //     this.PaintFill(this.arr_letter, mangsonet1 + 1, mangsonet, this.sizeFillDraw);
-                    // }
                     console.log("Step: " + this.nextStep);
-                }, 500);
+                }, 100);
                 setTimeout(()=>{
                     if(this.sceneNext < 4){
-                        // console.log("net: " + this.netthu);
                         this.tutorial.getComponent(cc.Animation).play('net'+ (this.netthu) + '_' + this.letter);
                         this.netthu++;
                     }
-                }, 1500);
+                }, 500);
                 this.nextStep = this.nextStep + 1;
             }
 
@@ -615,36 +632,10 @@ cc.Class({
         // console.log("A" + new Number(arr[this.sceneNext+4][this.letterIndex].split(" ")[arr[this.sceneNext+1][this.letterIndex] - 1]));
         if(this.apples.length != 0){
             if(this.apples[this.apples.length - 1].active === false && this.nextStep == this.strockCount && checkNext === true && this._isGameOver === false && this.sceneNext < 4){
-                setTimeout(()=>{
-                    this.brush.getComponent('Brush').clear();
-                    var n = this.sceneNext - 1;
-                    if(n === 1){
-                        var a = new Number(arr[4][this.letterIndex].split(" ")[arr[1][this.letterIndex] - 2]);
-                        var b = new Number(arr[4][this.letterIndex].split(" ")[arr[1][this.letterIndex] - 1]);
-                        if(arr[1][this.letterIndex] == 1){
-                            a = -1;
-                        }
-                    } 
-                    if(n === 2){
-                        var a = new Number(arr[5][this.letterIndex].split(" ")[arr[2][this.letterIndex] - 2]);
-                        var b = new Number(arr[5][this.letterIndex].split(" ")[arr[2][this.letterIndex] - 1]);
-                        if(arr[2][this.letterIndex] == 1){
-                            a = -1;
-                        }
-                    }
-                    if(n === 3){
-                        var a = new Number(arr[6][this.letterIndex].split(" ")[arr[3][this.letterIndex] - 2]);
-                        var b = new Number(arr[6][this.letterIndex].split(" ")[arr[3][this.letterIndex] - 1]);
-                        if(arr[3][this.letterIndex] == 1){
-                            a = -1;
-                        }
-                    }
-                    // this.PaintFill(this.arr_letter, a+1, b, this.sizeFillDraw);
+                this.brush.getComponent('Brush').clear();
+                setTimeout(() => {
                     this.node.getComponent("SoundManager").playEffectSound("exactly", false);
-                }, 500);
-                setTimeout(()=>{
-                    this.tutorialScript.string = 'Bạn đã hoàn thành, chúc mừng!';
-                }, 1000);
+                }, 300);
                 this.nextStep = this.nextStep + 1;
             }
             if(this.nextStep === this.strockCount + 1){
