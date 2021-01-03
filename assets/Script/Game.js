@@ -166,6 +166,7 @@ cc.Class({
             this.character.getComponent(cc.Animation).play('monsterOut');
             this.startTimeRoller();
         }, 2500);
+        this.apple = this.apple.data;
 
         // setTimeout(()=>{
         //     this.tutorial.getComponent(cc.Animation).play('net6_' + this.letter);
